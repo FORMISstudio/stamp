@@ -1,4 +1,4 @@
-const API = 'stamp.formisworkk.workers.dev';
+const API = 'https://YOUR-WORKER.workers.dev';
 
 const K = new Uint32Array([
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -151,10 +151,21 @@ function fromBase64(text) {
 }
 
 async function api(path, options) {
-  const response = await fetch(`${API}${path}`, options);
+  let response;
+
+  try {
+    response = await fetch(`${API.replace(/\/+$/, '')}${path}`, options);
+  } catch {
+    throw new Error('Cannot reach the Stamp server. Check your connection and the API address in stamp.js.');
+  }
+
   const data = await response.json().catch(() => ({}));
 
-  if (!response.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+  if (!response.ok) {
+    const missing = response.status === 404 && !data.error;
+    throw new Error(data.error || (missing ? 'The Stamp server was not found. Check the API address in stamp.js.' : 'Something went wrong. Please try again.'));
+  }
+
   return data;
 }
 

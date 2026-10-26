@@ -19,6 +19,10 @@
   margin: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -634,6 +638,22 @@ h1 em {
 .embed img {
   height: 30px;
   width: fit-content;
+}
+
+.embed > button {
+  justify-self: start;
+  height: 40px;
+  padding: 0 18px;
+  border: 1.5px solid var(--ink);
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.embed > button:hover {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .embed code {
